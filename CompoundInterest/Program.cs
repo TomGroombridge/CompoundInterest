@@ -21,7 +21,7 @@ namespace CompoundInterest
             var path = @"C:\Users\tom.groombridge\downloads\market_no_headers.csv";
             if (File.Exists(path))
             {
-                 Console.WriteLine(EnoughInPot(path, RequestedAmount));               
+                 EnoughInPot(path, RequestedAmount);               
             }
             else
             {
@@ -67,17 +67,10 @@ namespace CompoundInterest
                     allInterest += interestAvailable[x];
                     x++;
                 } while (x < i);
-                Console.WriteLine("all interest needed is " + allInterest);
-
                 decimal compInterest = allInterest / i;
-                Console.WriteLine("compound interest is " + compInterest);
-
-
                 decimal principalPayment = ((decimal)RequestedAmount / loanTerm);
-                Console.WriteLine("The principal payment is  " + principalPayment);
-
                 Array LendersNeeded = orderedList.Take(i).ToArray();
-                SetRepayments(LendersNeeded, compInterest, principalPayment);
+                SetRepayments(compInterest, principalPayment);
                 return i;
             }
             else
@@ -87,21 +80,20 @@ namespace CompoundInterest
             }
         }
 
-        public static int SetRepayments(Array lenders, decimal rate, decimal principal)
+        public static int SetRepayments(decimal rate, decimal principal)
         {            
             decimal totalRepayments = 0;
             decimal remainingPrincipal = 1000;           
             do
             {
-                decimal interestPerMonth = ((remainingPrincipal * Math.Round(rate, 2)) / months);
-                Console.WriteLine("Interest per month " + Math.Round(interestPerMonth, 2));
+                decimal interestPerMonth = ((remainingPrincipal * Math.Round(rate, 2)) / months);                
                 totalRepayments += (principal + Math.Round(interestPerMonth, 2));
                 remainingPrincipal = (remainingPrincipal - principal);
-                Console.WriteLine("Remaining Principal: " + remainingPrincipal);
+               
             } while (remainingPrincipal >= 0);
             decimal monthlyRepayments = (totalRepayments / loanTerm);
-            Console.WriteLine("total repayments " + totalRepayments);
             totalRepayments = (monthlyRepayments * loanTerm);
+            Console.WriteLine("total repayments " + totalRepayments);
             Console.WriteLine("Monthly repayments of " + Math.Round(monthlyRepayments, 2));
             Console.WriteLine("Total repayments of " +  Math.Round(totalRepayments));
             return 100;
