@@ -46,10 +46,9 @@ namespace CompoundInterest
                 var interestValue = decimal.Parse(item[1]);                              
                 interestAvailable.Add(interestValue);
                 amountAvailable.Add(decValue);
-            }
-            decimal totalAvailable = amountAvailable.Sum();
+            }            
 
-            if (totalAvailable > RequestedAmount)
+            if (amountAvailable.Sum() > RequestedAmount)
             {
                 var lenderAmounts = amountAvailable;
                 int sum = 0;
