@@ -9,6 +9,9 @@ namespace CompoundInterest
 {
     class Program
     {
+
+        public const int loanTerm = 36;
+
         public static void Main()
         {
             var path = @"C:\Users\tom.groombridge\downloads\market_no_headers.csv";
@@ -67,7 +70,7 @@ namespace CompoundInterest
                 Console.WriteLine("compound interest is " + compInterest);
 
                 //decimal principalPayment = 27.78m;
-                decimal principalPayment = (1000.00m / 36);
+                decimal principalPayment = (1000.00m / loanTerm);
                 Console.WriteLine("The principal payment is  " + principalPayment);
 
                 Array LendersNeeded = orderedList.Take(i).ToArray();
@@ -92,9 +95,9 @@ namespace CompoundInterest
                 remainingPrincipal = (remainingPrincipal - principal);
                 Console.WriteLine("Remaining Principal: " + remainingPrincipal);
             } while (remainingPrincipal >= 0);
-            decimal monthlyRepayments = (totalRepayments / 36);
+            decimal monthlyRepayments = (totalRepayments / loanTerm);
             Console.WriteLine("total repayments " + totalRepayments);
-            totalRepayments = (monthlyRepayments * 36);
+            totalRepayments = (monthlyRepayments * loanTerm);
             Console.WriteLine("Monthly repayments of " + Math.Round(monthlyRepayments, 2));
             Console.WriteLine("Total repayments of " +  Math.Round(totalRepayments));
             return 100;
