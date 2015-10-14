@@ -11,13 +11,17 @@ namespace CompoundInterest
     {
 
         public const int loanTerm = 36;
+        public const int months = 12;
 
         public static void Main()
         {
+            int RequestedAmount = 0;
+            Console.WriteLine("Please enter the amount you would like to borrow");
+            RequestedAmount = Convert.ToInt32(Console.ReadLine());
             var path = @"C:\Users\tom.groombridge\downloads\market_no_headers.csv";
             if (File.Exists(path))
             {
-                 Console.WriteLine(EnoughInPot(path));               
+                 Console.WriteLine(EnoughInPot(path, RequestedAmount));               
             }
             else
             {
@@ -27,7 +31,7 @@ namespace CompoundInterest
         }
         
 
-        public static int EnoughInPot(string path)
+        public static int EnoughInPot(string path, int RequestedAmount)
         {
             string[][] lenderData = File.ReadLines(path)
                           .Select(line => line.Split(','))
@@ -39,14 +43,13 @@ namespace CompoundInterest
             foreach (var item in orderedList)
             {                
                 var decValue = int.Parse(item[2]);
-                var interestValue = decimal.Parse(item[1]);               
-                Console.WriteLine(item[2]);
+                var interestValue = decimal.Parse(item[1]);                              
                 interestAvailable.Add(interestValue);
                 amountAvailable.Add(decValue);
             }
-            decimal totalAvailable = amountAvailable.Sum();      
-      
-            if (totalAvailable > 100)
+            decimal totalAvailable = amountAvailable.Sum();
+
+            if (totalAvailable > RequestedAmount)
             {
                 var lenderAmounts = amountAvailable;
                 int sum = 0;
@@ -54,8 +57,8 @@ namespace CompoundInterest
                 do
                 {
                     sum += lenderAmounts[i];
-                    i++;                    
-                } while (sum < 1001);
+                    i++;
+                } while (sum < RequestedAmount);
 
                 decimal allInterest = 0;
                 int x = 0;
@@ -69,8 +72,8 @@ namespace CompoundInterest
                 decimal compInterest = allInterest / i;
                 Console.WriteLine("compound interest is " + compInterest);
 
-                //decimal principalPayment = 27.78m;
-                decimal principalPayment = (1000.00m / loanTerm);
+
+                decimal principalPayment = ((decimal)RequestedAmount / loanTerm);
                 Console.WriteLine("The principal payment is  " + principalPayment);
 
                 Array LendersNeeded = orderedList.Take(i).ToArray();
@@ -79,6 +82,7 @@ namespace CompoundInterest
             }
             else
             {
+                Console.WriteLine("Sorry but we do not have enough funds for your loan");
                 return 0;
             }
         }
@@ -89,7 +93,7 @@ namespace CompoundInterest
             decimal remainingPrincipal = 1000;           
             do
             {
-                decimal interestPerMonth = ((remainingPrincipal *  Math.Round(rate, 2)) / 12);
+                decimal interestPerMonth = ((remainingPrincipal * Math.Round(rate, 2)) / months);
                 Console.WriteLine("Interest per month " + Math.Round(interestPerMonth, 2));
                 totalRepayments += (principal + Math.Round(interestPerMonth, 2));
                 remainingPrincipal = (remainingPrincipal - principal);
